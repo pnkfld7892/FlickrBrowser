@@ -1,6 +1,8 @@
 package com.example.elischwarz.flickrbrowser;
 
-class Photo {
+import java.io.Serializable;
+
+class Photo implements Serializable {
 
     private String mTitle;
     private String mAuthor;
