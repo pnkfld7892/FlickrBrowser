@@ -38,31 +38,36 @@ class FlickrRecyclerViewAdapter extends RecyclerView.Adapter<FlickrRecyclerViewA
     @Override
     public void onBindViewHolder(@NonNull FlickrImageViewHolder holder, int position) {
         //called by the layout manager when new data is requested for an existing row
-        Photo photoItem = mPhotoList.get(position);
-        Log.d(TAG, "onBindViewHolder: " + photoItem.getTitle() + " --> " + position);
-        Picasso.get().load(photoItem.getImage())
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(holder.thumbnail);
+        if (mPhotoList == null || mPhotoList.size() == 0) {
+            holder.thumbnail.setImageResource(R.drawable.placeholder);
+            holder.title.setText(R.string.activity_empty_photo);
+        } else {
+            Photo photoItem = mPhotoList.get(position);
+            Log.d(TAG, "onBindViewHolder: " + photoItem.getTitle() + " --> " + position);
+            Picasso.get().load(photoItem.getImage())
+                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.placeholder)
+                    .into(holder.thumbnail);
 
-        holder.title.setText(photoItem.getTitle());
+            holder.title.setText(photoItem.getTitle());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return ((mPhotoList != null) && (mPhotoList.size() != 0) ? mPhotoList.size() : 0);
+        return ((mPhotoList != null) && (mPhotoList.size() != 0) ? mPhotoList.size() : 1);
     }
 
-    void loadNewData(List<Photo> newPhotos){
+    void loadNewData(List<Photo> newPhotos) {
         mPhotoList = newPhotos;
         notifyDataSetChanged();
     }
 
-    public Photo getPhoto(int position){
+    public Photo getPhoto(int position) {
         return ((mPhotoList != null) && (mPhotoList.size() != 0) ? mPhotoList.get(position) : null);
     }
 
-    static class FlickrImageViewHolder extends RecyclerView.ViewHolder{
+    static class FlickrImageViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG = "FlickrImageViewHolder";
         ImageView thumbnail;
         TextView title;
